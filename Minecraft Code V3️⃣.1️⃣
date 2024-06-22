@@ -258,6 +258,7 @@ Saplings = 0
 Stone = 0
 y_terrain = 10
 Server_Views = 0
+Planks = 0
 Enemy_Bed = None
 Your_Bed = None
 G1 = 0
@@ -427,11 +428,11 @@ if gamemode == 'bedwars':
 x_pos = (place % (game_size**2)) % game_size - int(np.floor(game_size/2))
 y_pos = -1 * ((place % (game_size**2)) // game_size) + int(np.floor(game_size/2))
 while i < 999:
-    if game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈' and not place + 2*game_size > game_size**2-1:
+    if game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈' and game[(place + game_size) % (game_size**2)] != '∥' and not place + 2*game_size > game_size**2-1:
         touching_ground = False
     else:
         touching_ground = True
-        if not game[place - game_size] == '▪' and not game[place - game_size] == '|' and game[place - game_size] == '0' and game[place - game_size] == '◈' and last_move == '':
+        if not game[place - game_size] == '▪' and not game[place - game_size] == '|' and game[place - game_size] == '0' and game[place - game_size] == '◈' and game[place - game_size] == '∥' and last_move == '':
             up_speed = 0
     for message in chat:
         print(message)
@@ -439,24 +440,26 @@ while i < 999:
     while k < game_size:
         print(game[k * game_size: (k + 1) * game_size])
         k += 1
-    print(f'Inventory: {Grass} grass, {Wood} wood, {Lotteries} lotteries, {Leaves} leaves, {Saplings} saplings, {Stone} stone')
+    print(f'Inventory: {Grass} grass, {Wood} wood, {Lotteries} lotteries, {Leaves} leaves, {Saplings} saplings, {Stone} stone, {Planks} planks')
     print(str(x_pos) + ", " + str(y_pos))
     if Your_Server is True:
         print(f'Your server has {Server_Views} views!')
     if gamemode == 'bedwars' and -9 <= x_pos <= -6 and (-9 <= y_pos <= -6 or 5 <= y_pos <= 8):
         move = input("Do u want 2 jump (w), move left (a) or move right (d) or break a block (bab) or place a block (pab) or chat or gamble or buy something (bs)? ")
     else:
-        move = input(
-            "Do u want 2 jump (w), move left (a) or move right (d) or break a block (bab) or place a block (pab) or chat or gamble? ")
+        if gamemode != 'peaceful':
+            move = input("Do u want 2 jump (w), move left (a) or move right (d) or break a block (bab) or place a block (pab) or chat or gamble? ")
+        else:
+            move = input("Do u want 2 jump (w), move left (a) or move right (d) or break a block (bab) or place a block (pab) or chat or gamble or craft? ")
     last_move = ''
     if (move.upper() == 'JUMP' or move.upper() == ' ' or move.upper() == 'W') and touching_ground is True:
         up_speed = 1
         last_move = 'jump'
-    elif (move.upper() == 'LEFT' or move.upper() == 'A') and place % game_size != 0 and game[place - 1] != '▪' and game[place - 1] != '|' and game[place - 1] != '0' and game[place - 1] != '◈':
+    elif (move.upper() == 'LEFT' or move.upper() == 'A') and place % game_size != 0 and game[place - 1] != '▪' and game[place - 1] != '|' and game[place - 1] != '0' and game[place - 1] != '◈' and game[place - 1] != '∥':
         game[place % (game_size**2)] = ' '
         place -= 1
         game[place % (game_size**2)] = '🙂'
-    elif (move.upper() == 'RIGHT' or move.upper() == 'D') and place % game_size != game_size - 1 and game[place + 1] != '▪' and game[place + 1] != '|' and game[place + 1] != '0' and game[place + 1] != '◈':
+    elif (move.upper() == 'RIGHT' or move.upper() == 'D') and place % game_size != game_size - 1 and game[place + 1] != '▪' and game[place + 1] != '|' and game[place + 1] != '0' and game[place + 1] != '◈' and game[place + 1] != '∥':
         game[place % (game_size**2)] = ' '
         place += 1
         game[place % (game_size**2)] = '🙂'
@@ -465,7 +468,7 @@ while i < 999:
         y = input('y? ')
         try:
             place_break = (int(y) - int(np.floor(game_size/2))) * -game_size + int(x) + int(np.floor(game_size/2))
-            if ((int(x_pos) - int(x)) ** 2 + (int(y_pos) - int(y)) ** 2) ** 0.5 < 2.9 and (game[place_break] == '▪' or game[place_break] == '|' or game[place_break] == '0' or game[place_break] == '◈'):
+            if ((int(x_pos) - int(x)) ** 2 + (int(y_pos) - int(y)) ** 2) ** 0.5 < 2.9 and (game[place_break] == '▪' or game[place_break] == '|' or game[place_break] == '0' or game[place_break] == '◈' or game[place_break] == '∥'):
                 if game[place_break] == '▪':
                     Grass += 1
                     game[place_break] = ' '
@@ -481,6 +484,9 @@ while i < 999:
                 if game[place_break] == '◈':
                     Stone += 1
                     game[place_break] = ' '
+                if game[place_break] == '∥':
+                    Planks += 1
+                    game[place_break] = ' '
         except ValueError:
             pass
     elif move.upper() == 'PAB' or move.upper() == 'PLACE A BLOCK':
@@ -489,7 +495,7 @@ while i < 999:
         try:
             place_break = (int(y) - int(np.floor(game_size/2))) * -game_size + int(x) + int(np.floor(game_size/2))
             if ((int(x_pos) - int(x)) ** 2 + (int(y_pos) - int(y)) ** 2) ** 0.5 < 2.9 and game[place_break] == ' ':
-                block = input('Do you want to place grass or wood or leaves or saplings or stone? ')
+                block = input('Do you want to place grass or wood or leaves or saplings or stone or planks? ')
                 if block.upper() == 'GRASS' and Grass > 0:
                     game[place_break] = '▪'
                     Grass -= 1
@@ -505,6 +511,9 @@ while i < 999:
                 if block.upper() == 'STONE' and Stone > 0:
                     game[place_break] = '◈'
                     Stone -= 1
+                if block.upper() == 'PLANKS' and Planks > 0:
+                    game[place_break] = '∥'
+                    Planks -= 1
         except ValueError:
             pass
     elif move.upper() == 'CHAT':
@@ -529,13 +538,23 @@ while i < 999:
             Wood += 10
             Leaves += 2
             Lotteries -= 50
+    elif move.upper() == 'CRAFT' and gamemode == 'peaceful':
+        print('Crafting Recipes:')
+        print('1. 1 wood -> 4 planks')
+        craft = input('Which recipe you want to craft? (Choose Number) ')
+        if craft == '1':
+            craft_count = input(f'How many times do you want to craft recipe {craft}? ')
+            if craft_count.isdigit():
+                if Wood >= 1 * int(craft_count):
+                    Wood -= 1 * int(craft_count)
+                    Planks += 4 * int(craft_count)
     game[place % (game_size**2)] = ' '
     if up_speed > 0:
         i = 0
         while i < up_speed:
             game[place % (game_size**2)] = ' '
             place -= game_size
-            if game[place] != '▪' and game[place] != '|' and game[place] != '0' and game[place] != '◈' and place - game_size >= 0:
+            if game[place] != '▪' and game[place] != '|' and game[place] != '0' and game[place] != '◈' and game[place] != '∥' and place - game_size >= 0:
                 game[place] = '🙂'
             else:
                 place += game_size
@@ -545,7 +564,7 @@ while i < 999:
         while i < -1 * up_speed:
             game[place % (game_size**2)] = ' '
             place += game_size
-            if game[place] != '▪' and game[place] != '|' and game[place] != '0' and game[place] != '◈' and place + game_size < game_size**2:
+            if game[place] != '▪' and game[place] != '|' and game[place] != '0' and game[place] != '◈' and game[place] != '∥' and place + game_size < game_size**2:
                 game[place] = '🙂'
             else:
                 place -= game_size
@@ -555,16 +574,16 @@ while i < 999:
         up_speed -= 1
     x_pos = int((place % (game_size**2)) % game_size - np.floor(game_size/2))
     y_pos = int(-1 * ((place % (game_size**2)) // game_size) + np.floor(game_size/2))
-    if gamemode == 'skywars' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
+    if gamemode == 'skywars' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈' and game[(place + game_size) % (game_size**2)] != '∥':
         print('You Died! You fell into the void!')
         break
-    if gamemode == 'parkour' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
+    if gamemode == 'parkour' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈' and game[(place + game_size) % (game_size**2)] != '∥':
         print('You Died! You fell into the void!')
         break
-    if gamemode == 'bedwars' and Your_Bed is False and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
+    if gamemode == 'bedwars' and Your_Bed is False and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈' and game[(place + game_size) % (game_size**2)] != '∥':
         print('You Died! You fell into the void!')
         break
-    if gamemode == 'bedwars' and Your_Bed is True and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
+    if gamemode == 'bedwars' and Your_Bed is True and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈' and game[(place + game_size) % (game_size**2)] != '∥':
         game[place] = ' '
         place = 401
         game[place] = '🙂'
