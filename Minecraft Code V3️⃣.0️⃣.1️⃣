@@ -1,5 +1,5 @@
-import numpy as np
 import random
+import numpy as np
 
 # blocks: ◈ is stone
 Time_Spent = 0
@@ -21,159 +21,158 @@ def login():
 
 
 def lottery():
-  """
-  lottery.
-  getting 3 A's on any line is a 1.385% chance or 1 in 72.2 chance.
-  """
-  import random
+    """
+    lottery.
+    getting 3 A's on any line is a 1.385% chance or 1 in 72.2 chance.
+    """
+    import random
 
-  MAX_LINES = 3
-  MAX_BET = 100
-  MIN_BET = 1
+    MAX_LINES = 3
+    MAX_BET = 100
+    MIN_BET = 1
 
-  ROWS = 3
-  COLS = 3
-  symbol_count = {
-      'A': 3,
-      'B': 4,
-      'C': 5,
-      'D': 6
-  }
+    ROWS = 3
+    COLS = 3
+    symbol_count = {
+        'A': 3,
+        'B': 4,
+        'C': 5,
+        'D': 6
+    }
 
-  symbol_value = {
-      'A': 100,
-      'B': 50,
-      'C': 25,
-      'D': 12
-  }
+    symbol_value = {
+        'A': 100,
+        'B': 50,
+        'C': 25,
+        'D': 12
+    }
 
-  def check_winnings(columns, lines, bet, values):
-      winnings = 0
-      winning_lines = []
-      for line in range(lines):
-          symbol = columns[0][line]
-          for column in columns:
-              symbol_to_check = column[line]
-              if symbol != symbol_to_check:
-                  break
-          else:
-              winnings += values[symbol] * bet
-              winning_lines.append(line + 1)
-      return winnings, winning_lines
+    def check_winnings(columns, lines, bet, values):
+        winnings = 0
+        winning_lines = []
+        for line in range(lines):
+            symbol = columns[0][line]
+            for column in columns:
+                symbol_to_check = column[line]
+                if symbol != symbol_to_check:
+                    break
+            else:
+                winnings += values[symbol] * bet
+                winning_lines.append(line + 1)
+        return winnings, winning_lines
 
-  def get_slot_machine_spin(rows, cols, symbols):
-      all_symbols = []
-      for symbol, symbol_count in symbols.items():
-          for _ in range(symbol_count):
-              all_symbols.append(symbol)
+    def get_slot_machine_spin(rows, cols, symbols):
+        all_symbols = []
+        for symbol, symbol_count in symbols.items():
+            for _ in range(symbol_count):
+                all_symbols.append(symbol)
 
-      columns = []
-      for _ in range(cols):
-          column = []
-          current_symbols = all_symbols[:]
-          for _ in range(rows):
-              value = random.choice(current_symbols)
-              #current_symbols.remove(value) <- dont do dis
-              column.append(value)
+        columns = []
+        for _ in range(cols):
+            column = []
+            current_symbols = all_symbols[:]
+            for _ in range(rows):
+                value = random.choice(current_symbols)
+                #current_symbols.remove(value) <- dont do dis
+                column.append(value)
 
-          columns.append(column)
+            columns.append(column)
 
-      return columns
+        return columns
 
-  def print_slot_machine(columns):
-      for row in range(len(columns[0])):
-          for i, column in enumerate(columns):
-              if i != len(columns) - 1:
-                  print(column[row], end=' | ')
-              else:
-                  print(column[row], end='')
-          print()
+    def print_slot_machine(columns):
+        for row in range(len(columns[0])):
+            for i, column in enumerate(columns):
+                if i != len(columns) - 1:
+                    print(column[row], end=' | ')
+                else:
+                    print(column[row], end='')
+            print()
 
-  def deposit():
-      while True:
-          amount = input('how much money do u want 2 deposit? $')
-          if amount.isdigit():
-              amount = int(amount)
-              if amount > 0:
-                  break
-              else:
-                  print('invalid value! number must be above 0')
-          else:
-              print('pls enter a number')
-      return amount
+    def deposit():
+        while True:
+            amount = input('how much money do u want 2 deposit? $')
+            if amount.isdigit():
+                amount = int(amount)
+                if amount > 0:
+                    break
+                else:
+                    print('invalid value! number must be above 0')
+            else:
+                print('pls enter a number')
+        return amount
 
-  def get_lines():
-      while True:
-          lines = input(f'enter da number of lines 2 bet on (1 - {MAX_LINES}) ')
-          if lines.isdigit():
-              lines = int(lines)
-              if 1 <= lines <= MAX_LINES:
-                  break
-              else:
-                  print(f'invalid value! number must be between 1 and {MAX_LINES} inclusive ')
-          else:
-              print('pls enter a number')
-      return lines
+    def get_lines():
+        while True:
+            lines = input(f'enter da number of lines 2 bet on (1 - {MAX_LINES}) ')
+            if lines.isdigit():
+                lines = int(lines)
+                if 1 <= lines <= MAX_LINES:
+                    break
+                else:
+                    print(f'invalid value! number must be between 1 and {MAX_LINES} inclusive ')
+            else:
+                print('pls enter a number')
+        return lines
 
-  def get_bet():
-      while True:
-          amount = input(f'how much money do u want 2 bet? ({MIN_BET} - {MAX_BET}) $')
-          if amount.isdigit():
-              amount = int(amount)
-              if MIN_BET <= amount <= MAX_BET:
-                  break
-              else:
-                  print(f'invalid value! number must be between {MIN_BET} and {MAX_BET} inclusive')
-          else:
-              print('pls enter a number')
-      return amount
+    def get_bet():
+        while True:
+            amount = input(f'how much money do u want 2 bet? ({MIN_BET} - {MAX_BET}) $')
+            if amount.isdigit():
+                amount = int(amount)
+                if MIN_BET <= amount <= MAX_BET:
+                    break
+                else:
+                    print(f'invalid value! number must be between {MIN_BET} and {MAX_BET} inclusive')
+            else:
+                print('pls enter a number')
+        return amount
 
-  def game(balance):
-      lines = get_lines()
-      while True:
-          bet = get_bet()
-          total_bet = bet * lines
-          if total_bet > balance:
-              print('u dont have enough money')
-          else:
-              break
-      print(f'u r betting ${bet} on {lines} lines. total bet is equal 2 ${total_bet}')
+    def game(balance):
+        lines = get_lines()
+        while True:
+            bet = get_bet()
+            total_bet = bet * lines
+            if total_bet > balance:
+                print('u dont have enough money')
+            else:
+                break
+        print(f'u r betting ${bet} on {lines} lines. total bet is equal 2 ${total_bet}')
 
-      slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
-      print_slot_machine(slots)
-      winnings, winning_lines = check_winnings(slots, lines, bet, symbol_value)
-      print(f'u won ${winnings}')
-      print(f'u won on', *winning_lines)
-      return winnings - total_bet
+        slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
+        print_slot_machine(slots)
+        winnings, winning_lines = check_winnings(slots, lines, bet, symbol_value)
+        print(f'u won ${winnings}')
+        print(f'u won on', *winning_lines)
+        return winnings - total_bet
 
-  def main():
-      balance = deposit()
-      while True:
-          print(f'current balance is ${balance}')
-          spin = input('press enter 2 spin (q to quit) ')
-          if spin.lower() == 'q' or spin.lower() == 'quit':
-              break
-          balance += game(balance)
-      print(f'u left with ${balance}')
+    def main():
+        balance = deposit()
+        while True:
+            print(f'current balance is ${balance}')
+            spin = input('press enter 2 spin (q to quit) ')
+            if spin.lower() == 'q' or spin.lower() == 'quit':
+                break
+            balance += game(balance)
+        print(f'u left with ${balance}')
 
-  main()
-
+    main()
 
 
 def convert_emoji(words):
-  text_split = words.split(' ')
-  output = ''
-  emojis = {
-      ':)': '🙂', ':(': '☹️', ":\\": '😐',
-      ":|": '😐', ":/": '😐', "O_O": '😮',
-      ":D": '😃', "XD": '😆', ":'(": '😢',
-      ":')": '🥲', ":P": '😛', ":3": '😗',
-      ">:(": '🤬', ">:)": '😈', "-_-": '😑',
-      "D:": '😦'
-  }
-  for emoji in text_split:
-      output += emojis.get(emoji.upper(), emoji) + ' '
-  return output
+    text_split = words.split(' ')
+    output = ''
+    emojis = {
+        ':)': '🙂', ':(': '☹️', ":\\": '😐',
+        ":|": '😐', ":/": '😐', "O_O": '😮',
+        ":D": '😃', "XD": '😆', ":'(": '😢',
+        ":')": '🥲', ":P": '😛', ":3": '😗',
+        ">:(": '🤬', ">:)": '😈', "-_-": '😑',
+        "D:": '😦'
+    }
+    for emoji in text_split:
+        output += emojis.get(emoji.upper(), emoji) + ' '
+    return output
 
 
 def spawn_tree(x, y):
@@ -283,7 +282,7 @@ if gamemode == 'skywars' or gamemode == 'bedwars':
         user_domain = "Anti09'er"
     user_id = random.randint(1000, 9999)
     enemy_name = user_domain + str(user_id)
-    chat.append(f'{enemy_name}: hi stupid noob')
+    chat.append(f'{enemy_name}: I will win!!!')
 game = []
 while i <= 441:
     game.append(' ')
@@ -556,16 +555,16 @@ while i < 999:
         up_speed -= 1
     x_pos = int((place % (game_size**2)) % game_size - np.floor(game_size/2))
     y_pos = int(-1 * ((place % (game_size**2)) // game_size) + np.floor(game_size/2))
-    if gamemode == 'skywars' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪':
+    if gamemode == 'skywars' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
         print('You Died! You fell into the void!')
         break
-    if gamemode == 'parkour' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % game_size**2] != '▪':
+    if gamemode == 'parkour' and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
         print('You Died! You fell into the void!')
         break
-    if gamemode == 'bedwars' and Your_Bed is False and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪':
+    if gamemode == 'bedwars' and Your_Bed is False and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
         print('You Died! You fell into the void!')
         break
-    if gamemode == 'bedwars' and Your_Bed is True and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪':
+    if gamemode == 'bedwars' and Your_Bed is True and place + 2*game_size > game_size**2-1 and game[(place + game_size) % (game_size**2)] != '▪' and game[(place + game_size) % (game_size**2)] != '|' and game[(place + game_size) % (game_size**2)] != '0' and game[(place + game_size) % (game_size**2)] != '◈':
         game[place] = ' '
         place = 401
         game[place] = '🙂'
