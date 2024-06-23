@@ -1,0 +1,4 @@
+Basically Minecraft
+ - 5 GAMEMODES
+ - 5 BLOCK TYPES
+ - NATURAL TERRAIN
